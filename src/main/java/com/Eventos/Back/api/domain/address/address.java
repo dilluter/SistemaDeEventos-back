@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-class address {
+public class address {
     @Id
     @GeneratedValue
     private UUID id;
