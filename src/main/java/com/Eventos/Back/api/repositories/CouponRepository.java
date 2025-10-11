@@ -1,6 +1,6 @@
 package com.Eventos.Back.api.repositories;
 
-import com.Eventos.Back.api.domain.coupon;
+import com.Eventos.Back.api.domain.coupon.coupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
