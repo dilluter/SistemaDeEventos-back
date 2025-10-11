@@ -1,5 +1,6 @@
-package com.Eventos.Back.api.domain;
+package com.Eventos.Back.api.domain.coupon;
 
+import com.Eventos.Back.api.domain.event.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
