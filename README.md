@@ -1,87 +1,71 @@
-Backend Sistema de Eventos
-API REST desenvolvida em Java com Spring Boot para gerenciamento de eventos, incluindo cadastro, consulta e regras de negócio específicas para datas e endereços.
+# Backend Sistema de Eventos
 
-Tecnologias
-Java 21
+API REST desenvolvida em **Java** com Spring Boot para gerenciamento de eventos, incluindo cadastro, consulta e regras de negócio específicas para datas e endereços. [web:55]
 
-Spring Boot 3 (Web, Data JPA)
-​
+## Tecnologias
 
-PostgreSQL como banco de dados principal
-​
+- Java 21  
+- Spring Boot 3 (Web, Data JPA)
+- PostgreSQL como banco de dados principal 
+- Flyway para migrações de banco  
+- AWS S3 para armazenamento de arquivos/imagens 
+- Lombok para redução de boilerplate  
+- Spring Boot DevTools para live reload em desenvolvimento
+- JUnit, Mockito e AssertJ para testes automatizados
 
-Flyway para migrações de banco
-​
+## Pré‑requisitos
 
-AWS S3 para armazenamento de arquivos/imagens
-​
+- Java 21 instalado e configurado (JAVA_HOME) 
+- Maven 3.6+ instalado
+- PostgreSQL em execução com um banco criado (por exemplo, `eventos_db`)
+- Conta AWS com credenciais válidas e um bucket S3 configurado 
 
-Lombok para redução de boilerplate
+## Configuração
 
-DevTools para live reload em desenvolvimento
+Crie um arquivo `application.properties` ou `application.yml` com as propriedades abaixo, ajustando usuário, senha, URL e bucket:
 
-JUnit, Mockito e AssertJ para testes automatizados
-​
+spring.datasource.url=jdbc:postgresql://localhost:5432/eventos_db
+spring.datasource.username=SEU_USUARIO
+spring.datasource.password=SUA_SENHA
+spring.datasource.driver-class-name=org.postgresql.Driver
 
-Pré‑requisitos
-Java 21 instalado e configurado (JAVA_HOME)
-​
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
 
-Maven 3.6+ instalado
-​
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:db/migration
 
-PostgreSQL em execução com um banco criado (ex.: eventos_db)
-​
+Configure também as credenciais da AWS para acesso ao S3:
 
-Conta AWS com credenciais válidas e um bucket S3 configurado
-​
+text
+cloud.aws.credentials.access-key=SUA_ACCESS_KEY
+cloud.aws.credentials.secret-key=SUA_SECRET_KEY
+cloud.aws.region.static=us-east-1
+app.aws.s3.bucket=seu-bucket-eventos
 
-Configuração
-Crie um arquivo application.properties ou application.yml com:
+As migrações do Flyway são executadas automaticamente na inicialização da aplicação, garantindo que o schema do banco esteja versionado e atualizado.
 
-URL do banco PostgreSQL (spring.datasource.url, username, password)
-​
-
-Configurações do Flyway (spring.flyway.enabled=true e pasta de migrations classpath:db/migration)
-​
-
-Credenciais da AWS (cloud.aws.credentials.access-key, secret-key, região e nome do bucket S3)
-​
-
-As migrações do Flyway serão executadas automaticamente na inicialização da aplicação, garantindo que o schema do banco esteja sempre versionado e atualizado.
-​
-
-Execução do projeto
-Para rodar a aplicação em modo desenvolvimento:
-
+Executando o projeto
 bash
 mvn spring-boot:run
-Este comando sobe o servidor embutido (Tomcat) na porta padrão 8080, carregando as entidades JPA, executando as migrations Flyway e conectando ao PostgreSQL configurado.
-​
+O comando acima sobe o servidor embutido do Spring Boot na porta padrão 8080, conecta ao PostgreSQL configurado e aplica as migrações do Flyway.
 
 Testes
-Para executar a suíte de testes unitários e de integração:
-
 bash
 mvn test
-Os testes utilizam JUnit, Mockito e AssertJ para validação de regras de negócio, serviços e repositórios.
-​
+Os testes utilizam JUnit, Mockito e AssertJ para validar regras de negócio, serviços e repositórios de forma isolada, mockando dependências externas como repositórios JPA e integrações com AWS S3.
 
-Mocks são criados com Mockito para isolar dependências externas (repositórios, serviços de S3, etc.).
-​
-
-Estrutura geral (sugestão)
-domain/ entidades de domínio (Event, Address, Coupon, etc.)
-​
-​
-
-repository/ interfaces JPA para acesso ao PostgreSQL
-
-service/ regras de negócio e integração com AWS S3
-
-controller/ endpoints REST de eventos, endereços e cupons
-
-db/migration/ scripts SQL de versão do banco gerenciados pelo Flyway
-​
-
-Sinta-se à vontade para pedir uma versão em inglês ou incluir a lista de endpoints que já existem na API.
+Estrutura do projeto
+text
+src/
+ └── main/
+     ├── java/
+     │   └── com/eventos/back/
+     │       ├── controller/    # Endpoints REST de eventos, endereços, cupons
+     │       ├── service/       # Regras de negócio e integração com S3
+     │       ├── repository/    # Interfaces JPA para PostgreSQL
+     │       └── domain/        # Entidades (Event, Address, Coupon, etc.)
+     └── resources/
+         ├── application.yml    # Configurações da aplicação
+         └── db/
+             └── migration/     # Scripts SQL do Flyway (V1__*.sql, V2__*.sql, ...)
