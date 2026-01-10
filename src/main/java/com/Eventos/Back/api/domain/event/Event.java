@@ -1,31 +1,31 @@
 package com.Eventos.Back.api.domain.event;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.Eventos.Back.api.domain.address.Address;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table (name = "events")
-@Setter
+@Table(name = "events")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event {
+
     @Id
     @GeneratedValue
     private UUID id;
+
     private String title;
     private String description;
-    private String  imgUrl;
+    private String imgUrl;
     private String eventUrl;
     private boolean remote;
     private Date date;
+
+    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
+    private Address address;
 }
